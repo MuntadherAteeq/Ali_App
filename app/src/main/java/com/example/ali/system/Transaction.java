@@ -5,6 +5,7 @@ public class Transaction {
     private int uID;
     private String tName;
     private double tPrice;
+    private String date;
 
     public Transaction(){
 
@@ -15,6 +16,15 @@ public class Transaction {
         this.uID = uID;
         this.tName = tName;
         this.tPrice = tPrice;
+
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getId() {

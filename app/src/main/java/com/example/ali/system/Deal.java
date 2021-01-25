@@ -9,18 +9,29 @@ public class Deal {
     private String building;
     private byte image;
     private double total;
+    private boolean active;
 
     public Deal(){
 
     }
 
-    public Deal(int id, String name, int phone, String date, String road, String building) {
+    public Deal(int id, String name, int phone, String date, String road, String building ,boolean active) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.date = date;
         this.road = road;
         this.building = building;
+        this.active=active;
+    }
+
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getId() {
