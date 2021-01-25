@@ -6,6 +6,10 @@ public class Transaction {
     private String tName;
     private double tPrice;
 
+    public Transaction(){
+
+    }
+
     public Transaction(int id, int uID, String tName, double tPrice) {
         this.id = id;
         this.uID = uID;

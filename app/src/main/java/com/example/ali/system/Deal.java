@@ -7,8 +7,12 @@ public class Deal {
     private String date;
     private String road;
     private String building;
-    private byte photo;
+    private byte image;
     private double total;
+
+    public Deal(){
+
+    }
 
     public Deal(int id, String name, int phone, String date, String road, String building) {
         this.id = id;
@@ -67,12 +71,12 @@ public class Deal {
         this.building = building;
     }
 
-    public byte getPhoto() {
-        return photo;
+    public byte getImage() {
+        return image;
     }
 
-    public void setPhoto(byte photo) {
-        this.photo = photo;
+    public void setImage(byte image) {
+        this.image = image;
     }
 
     public double getTotal() {
