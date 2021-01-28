@@ -72,7 +72,14 @@ public class Fragment_1 extends Fragment implements RecycleViewAdapter.OnClickIt
     public static void NewItemAdded() {
         deals.clear();
         storeDataInArrays();
-        adapter.notifyItemInserted(0);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                recyclerView.scrollToPosition(0);
+                adapter.notifyItemInserted(0);
+            }
+        }, 400);   //5 seconds
+
     }
 
     @Override
