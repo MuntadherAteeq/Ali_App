@@ -1,9 +1,13 @@
 package com.example.ali.system;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Deal {
     private int id;
     private String name;
-    private int phone;
+    private String phone;
     private String date;
     private String road;
     private String building;
@@ -12,10 +16,17 @@ public class Deal {
     private boolean active;
 
     public Deal(){
-
+        this.building=null;
+        this.road=null;
+        this.active=false;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        this.date = dateFormat.format(date);
     }
 
-    public Deal(int id, String name, int phone, String date, String road, String building ,boolean active) {
+
+
+    public Deal(int id, String name, String phone, String date, String road, String building ,boolean active) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -29,71 +40,54 @@ public class Deal {
     public boolean isActive() {
         return active;
     }
-
     public void setActive(boolean active) {
         this.active = active;
     }
-
+    public void setActive(int Zero_or_One) { active= Zero_or_One == 1; }
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
-        this.id = id;
+        this.id=id;
     }
-
-    public String getName() {
-        return name;
-    }
-
+    public String getName() { return name; }
     public void setName(String name) {
-        this.name = name;
-    }
+          this.name=name;
 
-    public int getPhone() {
+    }
+    public String getPhone() {
         return phone;
     }
-
-    public void setPhone(int phone) {
-        this.phone = phone;
+    public void setPhone(String phone) {
+        this.phone=phone;
     }
-
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
-        this.date = date;
+       this.date=date;
     }
-
     public String getRoad() {
         return road;
     }
-
     public void setRoad(String road) {
-        this.road = road;
+       this.road=road;
     }
-
     public String getBuilding() {
         return building;
     }
-
     public void setBuilding(String building) {
-        this.building = building;
+        this.building=building;
     }
-
     public byte getImage() {
         return image;
     }
-
     public void setImage(byte image) {
-        this.image = image;
+        this.image=image;
     }
-
     public double getTotal() {
         return total;
     }
-
     public void setTotal(double total) {
         this.total = total;
     }

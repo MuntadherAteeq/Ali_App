@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.ali.R;
 import com.example.ali.adapters.RecycleViewAdapter;
+import com.example.ali.system.Deal;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,10 @@ import java.util.ArrayList;
  * Use the {@link Fragment_2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_2 extends Fragment {
+public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickItemListener {
     private View view;
     private RecyclerView recyclerView ;
-    private ArrayList<String> item;
+    private ArrayList<Deal> item;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,20 +65,21 @@ public class Fragment_2 extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         item = new ArrayList<>();
-        item.add("fghhghf");
-        item.add("fghhghf");
-        item.add("fghhghf");
-        item.add("fghhghf");
-        item.add("fghhghf");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_2,container,false);
         recyclerView = (RecyclerView) view.findViewById(R.id.history_RecycleView);
-        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(),item);
+        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(),item,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recycleViewAdapter);
         return view;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
     }
 }

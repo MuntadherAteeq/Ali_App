@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".NewDealActivity"
-    android:background="@color/background"
-    android:padding="20dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".NewDealActivity"
+android:background="@color/background"
+android:padding="20dp"
     >
 
-
     <com.google.android.material.textfield.TextInputLayout
+
         android:id="@+id/name_field"
-        app:errorEnabled="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="81dp"
+        android:layout_marginTop="16dp"
         android:hint="الاسم"
-
-
-        tools:ignore="MissingConstraints"
-        app:boxBackgroundColor="#3a3a3a"
-        app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue"
         android:textColorHint="@color/default_box_stroke_color"
-        app:counterTextColor="@color/default_box_stroke_color"
-        android:theme="@style/Widget.Design.TextInputLayout"
+        app:boxBackgroundColor="#3a3a3a"
 
-        >
+        app:boxStrokeColor="@color/blue"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:counterTextColor="@color/default_box_stroke_color"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.995"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@color/white"
             android:layout_gravity="end"
+            android:inputType="text"
+            android:maxLength="20"
             android:textAlignment="viewEnd"
-            />
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phone_filed"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="12dp"
 
         android:textColorHint="@color/default_box_stroke_color"
         android:theme="@style/Widget.Design.TextInputLayout"
@@ -56,53 +63,60 @@
         app:errorEnabled="true"
         app:hintTextColor="@color/blue"
 
-
+        app:counterEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_field"
+        app:counterMaxLength="15"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:hint="الهاتف"
             android:inputType="phone"
-            android:textColor="@color/white"
-            android:layout_gravity="end"
             android:textAlignment="viewEnd"
+            android:textColor="@color/white"
+            android:maxLength="15"
 
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/building_field"
-        android:layout_width="166dp"
-        android:layout_height="81dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:layout_marginTop="12dp"
         android:textColorHint="@color/default_box_stroke_color"
         android:theme="@style/Widget.Design.TextInputLayout"
         app:boxBackgroundColor="#3a3a3a"
         app:boxStrokeColor="@color/blue"
         app:counterEnabled="true"
-        app:counterMaxLength="4"
+        app:counterMaxLength="6"
         app:counterTextColor="@color/default_box_stroke_color"
         app:errorEnabled="true"
 
         app:hintTextColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phone_filed"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/building_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:hint="المبنى"
             android:inputType="number"
-            android:textColor="@color/white"
-            android:maxLength="4"
-            android:layout_gravity="end"
+            android:maxLength="6"
+            android:nextFocusLeft="@+id/road_field"
             android:textAlignment="viewEnd"
+            android:textColor="@color/white"
 
             />
 
@@ -111,40 +125,38 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/road_field"
-        android:layout_width="166dp"
+        android:layout_width="match_parent"
         android:layout_height="81dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginTop="12dp"
         android:textColorHint="@color/default_box_stroke_color"
         android:theme="@style/Widget.Design.TextInputLayout"
         app:boxBackgroundColor="#3a3a3a"
-        app:boxStrokeColor="@color/blue"
 
+        app:boxStrokeColor="@color/blue"
         app:counterEnabled="true"
-        app:counterMaxLength="4"
+        app:counterMaxLength="5"
         app:counterTextColor="@color/default_box_stroke_color"
         app:errorEnabled="true"
+
+
         app:hintTextColor="@color/blue"
-
-
-        app:layout_constraintBottom_toBottomOf="@+id/building_field"
-        app:layout_constraintEnd_toStartOf="@+id/building_field"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/building_field"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/building_field"
         tools:ignore="MissingConstraints">
-
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/road_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:hint="الطريق"
             android:inputType="number"
-            android:maxLength="4"
-            android:textColor="@color/white"
-            android:layout_gravity="end"
+            android:maxLength="5"
             android:textAlignment="viewEnd"
-            tools:ignore="RtlCompat" />
+            android:textColor="@color/white"
+            tools:ignore="RtlCompat"
+
+            />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -159,13 +171,36 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/road_field"
-        app:layout_constraintVertical_bias="0.024"
+        app:layout_constraintVertical_bias="0.003"
+
         tools:ignore="MissingConstraints"
 
         />
 
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/countryCodePicker"
+        android:layout_width="166dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:background="#3a3a3a"
+        android:contextClickable="true"
+        app:ccpDialog_backgroundColor="@color/purple_500"
+        app:ccpDialog_cornerRadius="30dp"
+        app:ccpDialog_textColor="@color/textColor"
+        app:ccp_clickable="true"
+        app:ccp_contentColor="@color/textColor"
+        app:ccp_defaultLanguage="ARABIC"
+        app:ccp_defaultPhoneCode="973"
+        app:ccp_showArrow="true"
+        app:layout_constraintCircleRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_field"
+        tools:ignore="MissingConstraints" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

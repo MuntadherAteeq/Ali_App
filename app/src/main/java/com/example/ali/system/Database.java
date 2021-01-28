@@ -2,6 +2,7 @@ package com.example.ali.system;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -23,7 +24,7 @@ public class Database extends SQLiteOpenHelper {
     private String uid = "uID";
 
 
-    public Database(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public Database(@Nullable Context context) {
         super(context, "Database.db", null, 1);
     }
 
@@ -42,10 +43,12 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(name,deal.getName());
-        cv.put(phone,deal.getName());
-        cv.put(date,deal.getName());
-        cv.put(building,deal.getName());
-        cv.put(road,deal.getName());
+        cv.put(phone,deal.getPhone());
+        cv.put(date,deal.getDate());
+        cv.put(building,deal.getBuilding());
+        cv.put(road,deal.getRoad());
+        cv.put(image,deal.getImage());
+        cv.put(active,deal.isActive());
         long insert = db.insert(deals_Table, null, cv);
         return insert != -1;
 
@@ -68,13 +71,30 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(name,deal.getName());
-        cv.put(phone,deal.getName());
-        cv.put(date,deal.getName());
-        cv.put(building,deal.getName());
-        cv.put(road,deal.getName());
-        if (deal.isActive())cv.put(active,"1");else cv.put(active,"0");
+        cv.put(phone,deal.getPhone());
+        cv.put(date,deal.getDate());
+        cv.put(building,deal.getBuilding());
+        cv.put(road,deal.getRoad());
+        cv.put(image,deal.getImage());
+        cv.put(active,deal.isActive());
         long result = db.update(deals_Table, cv, "_id=?", new String[]{id});
         return result != -1;
+
+    }
+    public Cursor readAllDeals(){
+        String query = "SELECT * FROM " + deals_Table+" ORDER BY id DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        if(cursor.getCount() == 0){
+             cursor = null;
+            return cursor;
+        }else{
+            return cursor;
+        }
 
     }
 

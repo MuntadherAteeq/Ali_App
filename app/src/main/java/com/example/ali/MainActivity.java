@@ -1,10 +1,14 @@
 package com.example.ali;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import com.example.ali.system.Database;
+import com.example.ali.system.Deal;
+import com.example.ali.ui.main.Fragment_1;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -17,10 +21,26 @@ import android.widget.Toast;
 
 import com.example.ali.ui.main.SectionsPagerAdapter;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    TabLayout tabs;
-    FloatingActionButton fab;
+    private TabLayout tabs;
+    private FloatingActionButton fab;
+    public static int request_Code=-1;
+    // public static ArrayList<Deal> deals =new ArrayList<>();
+    private Database db;
+   // private Deal deal;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (request_Code == 1){
+            request_Code= -1;
+            Fragment_1.NewItemAdded();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -33,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,17 +61,19 @@ public class MainActivity extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
+        db = new Database(this);
+
+
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         fab = findViewById(R.id.fab);
+        fab.setBackgroundColor(Color.parseColor("#0096db"));
 
 
-        tabs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, String.valueOf(tabs.getSelectedTabPosition()), Toast.LENGTH_SHORT).show();
-            }
-        });
+
+
+
+
         // On tab change what will happen
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -60,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 if (tab.getPosition()==0){
                     fab.setImageResource(R.drawable.ic_add_24);
                 }else if (tab.getPosition()==1){
-                    fab.setImageResource(R.drawable.ic_add_24);
+                    fab.setImageResource(R.drawable.ic_search_24);
 
                 }else if (tab.getPosition()==2){
                     fab.setImageResource(R.drawable.ic_wallet_24);
@@ -83,14 +104,25 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tabs.getSelectedTabPosition() != 2) {
-                    Intent intent = new Intent(MainActivity.this, NewDealActivity.class);
-                    startActivityForResult(intent, 1);
-                }else {
-                    // open new page to add to wallet
-                }
+                Intent intent = new Intent(MainActivity.this, NewDealActivity.class);
+                startActivityForResult(intent,0);
+                //deals.add(new Deal());
+                //Fragment_1.adapter.notifyItemInserted(0);
+                //Fragment_1.recyclerView.scrollToPosition(0);
+
             }
-        });
+    });
+
+
+
+
+
+
+
+
+
     }
 
-}
+
+        }
+
