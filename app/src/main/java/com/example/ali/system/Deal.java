@@ -18,7 +18,7 @@ public class Deal {
     public Deal(){
         this.building=null;
         this.road=null;
-        this.active=false;
+        this.active=true;
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         this.date = dateFormat.format(date);

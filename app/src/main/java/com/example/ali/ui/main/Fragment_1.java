@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.ali.DealItem;
 import com.example.ali.MainActivity;
 import com.example.ali.R;
 import com.example.ali.adapters.RecycleViewAdapter;
@@ -75,10 +76,15 @@ public class Fragment_1 extends Fragment implements RecycleViewAdapter.OnClickIt
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 recyclerView.scrollToPosition(0);
                 adapter.notifyItemInserted(0);
             }
-        }, 400);   //5 seconds
+        }, 500);
 
     }
 
@@ -89,11 +95,6 @@ public class Fragment_1 extends Fragment implements RecycleViewAdapter.OnClickIt
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
-
-
     }
 
     @Override
@@ -120,9 +121,8 @@ public class Fragment_1 extends Fragment implements RecycleViewAdapter.OnClickIt
 
     @Override
     public void onItemClick(int position) {
-        //list.add("position");
-       // adapter.notifyItemInserted(position);
-
+       Intent intent = new Intent(getActivity(), DealItem.class);
+       startActivityForResult(intent,-1);
     }
 
     private static void storeDataInArrays() {

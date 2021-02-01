@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NewDealActivity.class);
                 startActivityForResult(intent,0);
+
                 //deals.add(new Deal());
                 //Fragment_1.adapter.notifyItemInserted(0);
                 //Fragment_1.recyclerView.scrollToPosition(0);
