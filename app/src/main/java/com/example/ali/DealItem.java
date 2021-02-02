@@ -28,7 +28,7 @@ public class DealItem extends AppCompatActivity {
     ImageButton imageButton,clear_par;
     TextInputEditText edComment,edPrice;
     String comment;
-    double price = 0;
+    double price ;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,51 +60,21 @@ public class DealItem extends AppCompatActivity {
         note_Bar = findViewById(R.id.price_bar);
         note_price = findViewById(R.id.price_tag);
         line = findViewById(R.id.tag);
+        clear_par.setVisibility(VISIBLE);
         edPrice.clearFocus();
         setWidgetFunctions();
 
         clear_par.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                note_Bar.setVisibility(View.GONE);
-                edComment.setVisibility(View.GONE);
-                note_Bar.clearFocus();
-                edPrice.setVisibility(VISIBLE);
-                edPrice.requestFocus();
-
+                deletePriceTag();
             }
         });
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text_price=edPrice.getText().toString().trim();
-                if (!text_price.isEmpty()){
-
-                    double num_price = Double.parseDouble(text_price);
-                    if (validatePrice(num_price)){
-
-                        edPrice.setVisibility(View.GONE);
-                        edComment.setVisibility(VISIBLE);
-                        edPrice.clearFocus();
-                        edComment.requestFocus();
-                        price = Double.parseDouble(edPrice.getText().toString().trim());
-                        note_Bar.setVisibility(VISIBLE);
-                        note_price.setText(editPrice(num_price)+" BD");
-
-                        if (num_price >0 ){
-                            note_price.setTextColor(getResources().getColor(R.color.green));
-                            line.setCardBackgroundColor(getResources().getColor(R.color.green_dark));
-
-                        }else {
-                            note_price.setTextColor(getResources().getColor(R.color.red));
-                            line.setCardBackgroundColor(getResources().getColor(R.color.red_dark));
-                        }
-                    }else Toast.makeText(DealItem.this, "السعر مرفوض", Toast.LENGTH_SHORT).show();
-
-                }
-
+                setWidgetFunctions();
             }
         });
 
@@ -121,13 +91,6 @@ public class DealItem extends AppCompatActivity {
     public String editPrice(double text){
       return String.format("%.3f", text);
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putDouble("price",price);
-    }
     public void setWidgetFunctions(){
         String text_price=edPrice.getText().toString().trim();
         if (!text_price.isEmpty()){
@@ -135,26 +98,59 @@ public class DealItem extends AppCompatActivity {
             double num_price = Double.parseDouble(text_price);
             if (validatePrice(num_price)){
 
-                edPrice.setVisibility(View.GONE);
-                edComment.setVisibility(VISIBLE);
-                edPrice.clearFocus();
-                edComment.requestFocus();
-                price = Double.parseDouble(edPrice.getText().toString().trim());
-                note_Bar.setVisibility(VISIBLE);
-                note_price.setText(editPrice(num_price)+" BD");
-
                 if (num_price >0 ){
                     note_price.setTextColor(getResources().getColor(R.color.green));
                     line.setCardBackgroundColor(getResources().getColor(R.color.green_dark));
+                    setPriceTage(num_price);
 
-                }else {
+
+                }else if (num_price<0){
                     note_price.setTextColor(getResources().getColor(R.color.red));
                     line.setCardBackgroundColor(getResources().getColor(R.color.red_dark));
+                    setPriceTage(num_price);
+
+                }else {
+                    edPrice.setText("");
                 }
+
             }else Toast.makeText(DealItem.this, "السعر مرفوض", Toast.LENGTH_SHORT).show();
 
         }
 
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (!edPrice.getText().toString().trim().equals("")){
+            double temp = Double.parseDouble(edPrice.getText().toString().trim());
+            outState.putDouble("price",temp);
+        }
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (!String.valueOf(savedInstanceState.getDouble("price")).equals("")){
+            edPrice.setText(String.valueOf(savedInstanceState.getDouble("price")));
+            setWidgetFunctions();
+        }
+    }
+    private void deletePriceTag(){
+        note_Bar.setVisibility(View.GONE);
+        edComment.setVisibility(View.GONE);
+        note_Bar.clearFocus();
+        edPrice.setVisibility(VISIBLE);
+        edPrice.requestFocus();
+    }
+    private void setPriceTage(double num_price){
+        edPrice.setVisibility(View.GONE);
+        edComment.setVisibility(VISIBLE);
+        edPrice.clearFocus();
+        edComment.requestFocus();
+        price = Double.parseDouble(edPrice.getText().toString().trim());
+        note_Bar.setVisibility(VISIBLE);
+        note_price.setText(editPrice(num_price)+" BD");
+    }
 }
