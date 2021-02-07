@@ -2,11 +2,9 @@ package com.example.ali;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,14 +12,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 import com.example.ali.ui.main.Fragment_1;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.DateFormat;
@@ -63,7 +59,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
                    deal.setRoad(road);
                    deal.setDate(date);
                     if ( db.insert_New_Deal(deal) ){
-                        Fragment_1.deals.add(deal);
+                        Fragment_1.deals_active.add(deal);
                         MainActivity.request_Code=1;
                         finish();
                     }else {

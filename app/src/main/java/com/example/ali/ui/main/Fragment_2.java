@@ -1,17 +1,22 @@
 package com.example.ali.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.ali.DealItem;
 import com.example.ali.R;
 import com.example.ali.adapters.RecycleViewAdapter;
+import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 
 import java.util.ArrayList;
@@ -24,7 +29,15 @@ import java.util.ArrayList;
 public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickItemListener {
     private View view;
     private RecyclerView recyclerView ;
-    private ArrayList<Deal> item;
+    public static ArrayList<Deal> deals_unactive;
+    public static Database db;
+    private Deal deal;
+    private Handler handler;
+    public static RecycleViewAdapter adapter;
+
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,6 +70,7 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,22 +78,49 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        item = new ArrayList<>();
+        deals_unactive = new ArrayList<>();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_2,container,false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.history_RecycleView);
-        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(),item,this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(recycleViewAdapter);
+        view = inflater.inflate(R.layout.fragment_1,container,false);
+        db = new Database(this.getContext());
+        deals_unactive = new ArrayList<>();
+        handler = new Handler();
+        buildRecycleView();
         return view;
+    }
+
+    private void buildRecycleView() {
+        deals_unactive = db.readAllUnactiveDeals();
+        recyclerView = (RecyclerView) view.findViewById(R.id.inbox_RecycleView);
+        adapter = new RecycleViewAdapter(getContext(), deals_unactive,this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+
     }
 
     @Override
     public void onItemClick(int position) {
 
+        Intent intent = new Intent(getActivity(), DealItem.class);
+        intent.putExtra("Uid",String.valueOf(deals_unactive.get(position).getId()));
+        startActivityForResult(intent,position);
+
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        buildRecycleView();
+    }
+
+    @Override
+    public void onStart() {
+        buildRecycleView();
+        super.onStart();
+    }
+
+
+
 }

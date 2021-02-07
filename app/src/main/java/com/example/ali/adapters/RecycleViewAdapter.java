@@ -42,9 +42,15 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     }
 
+    @Override
+    public int getItemViewType(int position) {
+     return position;
+    }
+
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.pocket_item, parent, false);
         return new myViewHolder(view,onClickItemListener);
@@ -54,9 +60,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder holder, final int position) {
         // Putting information into each view holder by it position
-        holder.name_text.setText(item.get(position).getName());
-        holder.phone_text.setText(item.get(position).getPhone());
-        holder.date_text.setText(item.get(position).getDate());
+       holder.name_text.setText(item.get(position).getName());
+         holder.phone_text.setText(item.get(position).getPhone());
+      holder.date_text.setText(item.get(position).getDate());
     }
 
     @Override
@@ -67,12 +73,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
 
     class myViewHolder extends RecyclerView.ViewHolder {
+
         private OnClickItemListener onClickItemListener;
 
 
         // initialize layout elemnts here
 
-       TextView name_text,date_text,phone_text ;
+      TextView name_text,date_text,phone_text ;
         /*
         LinearLayout ;
         CardView ;
@@ -81,6 +88,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         myViewHolder(@NonNull View itemView , final OnClickItemListener onClickItemListener) {
             super(itemView);
             this.onClickItemListener= onClickItemListener;
+
 
             this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

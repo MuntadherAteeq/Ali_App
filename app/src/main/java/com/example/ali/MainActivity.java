@@ -4,15 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 import com.example.ali.ui.main.Fragment_1;
+import com.example.ali.ui.main.Fragment_2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +26,7 @@ import com.example.ali.ui.main.SectionsPagerAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private TabLayout tabs;
     private FloatingActionButton fab;
@@ -32,14 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private Database db;
    // private Deal deal;
 
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (request_Code == 1){
-            request_Code= -1;
-            Fragment_1.NewItemAdded();
-        }
     }
 
     @Override
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "UseCompatLoadingForDrawables"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,37 +67,11 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         fab.setBackgroundColor(Color.parseColor("#0096db"));
 
+        setupTabIcons();
 
 
 
 
-
-        // On tab change what will happen
-        tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition()==0){
-                    fab.setImageResource(R.drawable.ic_add_24);
-                }else if (tab.getPosition()==1){
-                    fab.setImageResource(R.drawable.ic_search_24);
-
-                }else if (tab.getPosition()==2){
-                    fab.setImageResource(R.drawable.ic_wallet_24);
-
-                }
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,16 +86,46 @@ public class MainActivity extends AppCompatActivity {
             }
     });
 
-
-
-
-
-
-
-
-
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setupTabIcons() {
+        tabs.getTabAt(0).setText("");
+        tabs.getTabAt(1).setText("");
+        tabs.getTabAt(2).setText("");
 
-        }
+        tabs.getTabAt(0).setIcon((getResources().getDrawable(R.drawable.ic_add_24)));
+        tabs.getTabAt(1).setIcon((getResources().getDrawable(R.drawable.ic_search_24)));
+        tabs.getTabAt(2).setIcon((getResources().getDrawable(R.drawable.ic_wallet_24)));
+
+        tabs.getTabAt(0).getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
+        tabs.getTabAt(1).getIcon().setColorFilter(Color.parseColor("#a8a8a8"), PorterDuff.Mode.SRC_IN);
+        tabs.getTabAt(2).getIcon().setColorFilter(Color.parseColor("#a8a8a8"), PorterDuff.Mode.SRC_IN);
+
+
+
+
+        tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
+                switch (tab.getPosition()){
+                    case 0:fab.setImageResource(R.drawable.ic_add_24);break;
+                    case 1:fab.setImageResource(R.drawable.ic_search_24);break;
+                    case 2:fab.setImageResource(R.drawable.ic_wallet_24);break;
+                }
+
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.parseColor("#a8a8a8"), PorterDuff.Mode.SRC_IN);
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+}
 

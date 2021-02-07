@@ -4,7 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_margin="0dp"
+    android:padding="0dp"
+
+    >
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+        <ImageView
+            android:id="@+id/wallpaper"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/wallpaper99"/>
+    </ScrollView>
+
+
+
 
     <include
         android:id="@+id/myNewToolbar"
@@ -18,7 +37,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/blue"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,12 +51,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00000000"
-            android:src="@drawable/ic_send" />
+            android:src="@drawable/ic_send"
+            />
 
 
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginBottom="5dp"
         android:id="@+id/transaction_recycleview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -51,7 +72,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="5dp"
         android:maxHeight="150dp"
         app:cardBackgroundColor="@color/purple_500"
         app:cardCornerRadius="25dp"
@@ -59,7 +80,9 @@
         app:layout_constraintEnd_toStartOf="@+id/cardView3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+
+        >
 
 
 
@@ -75,7 +98,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/comment_text"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:imeOptions="actionDone"

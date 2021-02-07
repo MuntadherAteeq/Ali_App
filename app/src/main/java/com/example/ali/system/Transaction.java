@@ -8,7 +8,6 @@ public class Transaction {
     private String date;
 
     public Transaction(){
-
     }
 
     public Transaction(int id, int uID, String tName, double tPrice) {
