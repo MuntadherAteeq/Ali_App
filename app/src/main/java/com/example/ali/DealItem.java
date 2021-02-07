@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,7 +51,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     CardView line;
     TextView note_price ,dealer_name, local_total;
     Switch active_switch;
-    ImageButton imageButton,clear_par;
+    ImageButton imageButton,clear_par,back_arrow;
     TextInputEditText edComment,edPrice;
     String comment;
     double price ;
@@ -64,6 +65,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     Deal deal;
     Handler handler;
     String position;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,8 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         dealer_name = findViewById(R.id.dealer_name);
         local_total = findViewById(R.id.local_price);
         line = findViewById(R.id.tag);
+        back_arrow = findViewById(R.id.back_arrow);
+
 
     }
 
@@ -168,13 +172,19 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
             }
 
         });
-        // on active swich clicked
-        active_switch.setOnClickListener(new View.OnClickListener() {
+        // on active swich change
+        active_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 deal.setActive(active_switch.isChecked());
                 db.updateDealData(deal);
-
+            }
+        });
+        // on back arrow clicked
+        back_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DealItem.super.onBackPressed();
             }
         });
 
@@ -182,9 +192,6 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
 
     @Override
     public void onBackPressed() {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("result", "result");
-        setResult(1,returnIntent);
         super.onBackPressed();
     }
 
@@ -242,7 +249,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (!String.valueOf(savedInstanceState.getDouble("price")).equals("")){
-            edPrice.setText(String.valueOf(savedInstanceState.getDouble("price")));
+            if (savedInstanceState.getDouble("price")!=0.0)edPrice.setText(String.valueOf(savedInstanceState.getDouble("price")));
             done = savedInstanceState.getBoolean("done");
             if (done)setWidgetFunctions();
 
