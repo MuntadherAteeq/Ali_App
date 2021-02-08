@@ -22,6 +22,7 @@ public class Deal {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         this.date = dateFormat.format(date);
+        this.total = 0;
     }
 
 

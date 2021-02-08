@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity  {
         tabs.getTabAt(1).setText("");
         tabs.getTabAt(2).setText("");
 
-        tabs.getTabAt(0).setIcon((getResources().getDrawable(R.drawable.ic_add_24)));
-        tabs.getTabAt(1).setIcon((getResources().getDrawable(R.drawable.ic_search_24)));
+        tabs.getTabAt(0).setIcon((getResources().getDrawable(R.drawable.ic_inbox)));
+        tabs.getTabAt(1).setIcon((getResources().getDrawable(R.drawable.ic_history_24)));
         tabs.getTabAt(2).setIcon((getResources().getDrawable(R.drawable.ic_wallet_24)));
 
         tabs.getTabAt(0).getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);

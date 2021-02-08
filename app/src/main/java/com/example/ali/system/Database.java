@@ -86,6 +86,7 @@ public class Database extends SQLiteOpenHelper {
         cv.put(road,deal.getRoad());
         cv.put(image,deal.getImage());
         cv.put(active,deal.isActive());
+        cv.put(total,deal.getTotal());
         long result = db.update(deals_Table, cv, "id=?", new String[]{String.valueOf(deal.getId())});
         return result != -1;
 
@@ -158,7 +159,7 @@ public class Database extends SQLiteOpenHelper {
         return deal;
 
     }
-    public ArrayList<Deal> readAllUnactiveDeals(){
+    public ArrayList<Deal> readAllUnactiveDeals(double total){
         String query = "SELECT * FROM " + deals_Table +" WHERE "+ active +" = "+ 0 +" ORDER BY id DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         deals = new ArrayList<>();
@@ -175,6 +176,7 @@ public class Database extends SQLiteOpenHelper {
             deal.setRoad(cursor.getString(6));
             deal.setActive(cursor.getInt(8));
             deals.add(deal);
+            total = deal.getTotal();
         }
         cursor.close();
         return deals;

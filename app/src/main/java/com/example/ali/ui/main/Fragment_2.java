@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ali.DealItem;
@@ -34,6 +35,8 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
     private Deal deal;
     private Handler handler;
     public static RecycleViewAdapter adapter;
+    private TextView public_total;
+    private double total;
 
 
 
@@ -80,6 +83,7 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         }
         deals_unactive = new ArrayList<>();
 
+
     }
 
     @Override
@@ -88,16 +92,20 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         db = new Database(this.getContext());
         deals_unactive = new ArrayList<>();
         handler = new Handler();
+        public_total = view.findViewById(R.id.public_total);
         buildRecycleView();
         return view;
     }
 
     private void buildRecycleView() {
-        deals_unactive = db.readAllUnactiveDeals();
+        total = 0;
+        deals_unactive = db.readAllUnactiveDeals(total);
         recyclerView = (RecyclerView) view.findViewById(R.id.inbox_RecycleView);
         adapter = new RecycleViewAdapter(getContext(), deals_unactive,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+//        public_total.setText(String.valueOf(total));
+
 
     }
 

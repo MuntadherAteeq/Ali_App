@@ -125,6 +125,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         }
         local_total.setText(String.valueOf(local_sum));
         deal.setTotal(local_sum);
+        db.updateDealData(deal);
     }
 
     private void onClickListeners() {
