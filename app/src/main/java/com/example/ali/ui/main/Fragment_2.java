@@ -31,13 +31,15 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickItemListener {
-    private View view;
+    private View view,view2;
     private RecyclerView recyclerView ;
     public static ArrayList<Deal> deals_unactive;
     public static Database db;
     private Deal deal;
     private Handler handler;
     private RecycleViewAdapter adapter;
+    private TextView public_sum;
+    private double sum=0;
 
 
 
@@ -94,6 +96,7 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         db = new Database(this.getContext());
         deals_unactive = new ArrayList<>();
         handler = new Handler();
+        public_sum = Objects.requireNonNull(getActivity()).findViewById(R.id.public_total);
         buildRecycleView();
         return view;
     }
@@ -104,6 +107,8 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         adapter = new RecycleViewAdapter(getContext(), deals_unactive,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        sum = db.getTotalSum();
+        public_sum.setText(String.valueOf(sum));
 
 
     }

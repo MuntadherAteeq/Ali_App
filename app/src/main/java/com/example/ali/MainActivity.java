@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity  {
     private FloatingActionButton fab;
     public static int request_Code=-1;
     private Database db;
-    private TextView public_sum;
-    private double sum=0;
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity  {
         tabs.setupWithViewPager(viewPager);
         fab = findViewById(R.id.fab);
         fab.setBackgroundColor(Color.parseColor("#0096db"));
-        public_sum =findViewById(R.id.public_total);
 
         setupTabIcons();
 
@@ -89,12 +87,7 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    @Override
-    protected void onStart() {
-        sum = db.getTotalSum();
-        public_sum.setText(String.valueOf(sum));
-        super.onStart();
-    }
+
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private void setupTabIcons() {
