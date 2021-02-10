@@ -74,6 +74,16 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
+    public boolean deleteDealData(String id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result1 = db.delete(deals_Table, "id=?",new String[]{id});
+        long result2 = db.delete(transaction_Table, "uID=?",new String[]{id});
+
+        return result1 != -1 && result2 != -1;
+    }
+
+
     public boolean updateDealData(Deal deal){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -134,6 +144,18 @@ public class Database extends SQLiteOpenHelper {
         return transactions;
 
         }
+    public double getTotalSum(){
+        String query = "SELECT * FROM " + deals_Table +" WHERE "+ active +" = 0" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+        double sum=0;
+        while (cursor.moveToNext()) {
+            sum+=cursor.getDouble(4);
+        }
+        cursor.close();
+        return sum;
+    }
+
     public Deal readDealOwnerByID(String id){
         String query = "SELECT * FROM " + deals_Table +" WHERE id = "+ id ;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -159,7 +181,7 @@ public class Database extends SQLiteOpenHelper {
         return deal;
 
     }
-    public ArrayList<Deal> readAllUnactiveDeals(double total){
+    public ArrayList<Deal> readAllUnactiveDeals(){
         String query = "SELECT * FROM " + deals_Table +" WHERE "+ active +" = "+ 0 +" ORDER BY id DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         deals = new ArrayList<>();
@@ -176,7 +198,6 @@ public class Database extends SQLiteOpenHelper {
             deal.setRoad(cursor.getString(6));
             deal.setActive(cursor.getInt(8));
             deals.add(deal);
-            total = deal.getTotal();
         }
         cursor.close();
         return deals;

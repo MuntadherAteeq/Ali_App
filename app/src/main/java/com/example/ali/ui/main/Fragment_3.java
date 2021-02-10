@@ -88,4 +88,9 @@ public class Fragment_3 extends Fragment implements RecycleViewAdapter.OnClickIt
     public void onItemClick(int position) {
 
     }
+
+    @Override
+    public void onItemLongClick(int position) {
+
+    }
 }

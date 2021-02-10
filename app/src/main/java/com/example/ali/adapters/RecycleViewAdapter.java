@@ -98,6 +98,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
 
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onClickItemListener.onItemLongClick(getAdapterPosition());
+                    return true;
+                }
+            });
 
             // Define the elements by thier id 
              name_text = itemView.findViewById(R.id.chat_name_txt);
@@ -130,6 +137,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     }
     public interface OnClickItemListener{
         void onItemClick(int position);
+        void onItemLongClick(int position);
     }
 
 

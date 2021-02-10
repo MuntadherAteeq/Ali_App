@@ -27,7 +27,7 @@ public class Deal {
 
 
 
-    public Deal(int id, String name, String phone, String date, String road, String building ,boolean active) {
+    public Deal(int id, String name, String phone, String date, String road, String building ,double total,boolean active) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -35,6 +35,7 @@ public class Deal {
         this.road = road;
         this.building = building;
         this.active=active;
+        this.total = total;
     }
 
 

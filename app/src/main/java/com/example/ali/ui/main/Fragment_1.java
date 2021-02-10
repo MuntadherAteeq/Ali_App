@@ -1,8 +1,12 @@
 package com.example.ali.ui.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -106,6 +110,30 @@ public class Fragment_1 extends Fragment implements RecycleViewAdapter.OnClickIt
        intent.putExtra("Uid",String.valueOf(deals_active.get(position).getId()));
        intent.putExtra("position",String.valueOf(deals_active.get(position)));
        startActivityForResult(intent,11);
+    }
+
+
+    @Override
+    public void onItemLongClick(int position) {
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+        builder1.setMessage("هل انت متأكد انك تريد حذف هذه المعاملة");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.deleteDealData(String.valueOf(deals_active.get(position).getId()));
+                buildRecycleView();
+                dialog.cancel();
+            }
+        });
+        builder1.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        builder1.show();
+
     }
 
     @Override

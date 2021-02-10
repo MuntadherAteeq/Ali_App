@@ -83,9 +83,9 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         clear_par.setVisibility(VISIBLE);
         dealer_name.setText(deal.getName());
         if (deal.isActive()){
-            active_switch.setChecked(true);
-        }else {
             active_switch.setChecked(false);
+        }else {
+            active_switch.setChecked(true);
         }
         edPrice.clearFocus();
         setWidgetFunctions();
@@ -123,8 +123,8 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         }else{
             local_total.setTextColor(getResources().getColor(R.color.red));
         }
-        local_total.setText(String.valueOf(local_sum));
-        deal.setTotal(local_sum);
+        local_total.setText(editPrice(local_sum));
+        deal.setTotal(Double.parseDouble(editPrice(local_sum )));
         db.updateDealData(deal);
     }
 
@@ -177,7 +177,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         active_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                deal.setActive(active_switch.isChecked());
+                deal.setActive(!active_switch.isChecked());
                 db.updateDealData(deal);
             }
         });
@@ -197,7 +197,10 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     }
 
     public boolean validatePrice(double iPrice){
-        return !(iPrice < (-1000)) && !(iPrice > (1000));
+        if (iPrice>1000 || iPrice<-1000){
+            return false;
+        }else if (iPrice<0.005 && iPrice>-0.005)return false;
+        return true;
     }
     @SuppressLint("DefaultLocale")
     public String editPrice(double text){

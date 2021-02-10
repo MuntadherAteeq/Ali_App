@@ -20,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ali.ui.main.SectionsPagerAdapter;
@@ -31,9 +32,9 @@ public class MainActivity extends AppCompatActivity  {
     private TabLayout tabs;
     private FloatingActionButton fab;
     public static int request_Code=-1;
-    // public static ArrayList<Deal> deals =new ArrayList<>();
     private Database db;
-   // private Deal deal;
+    private TextView public_sum;
+    private double sum=0;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,11 +62,11 @@ public class MainActivity extends AppCompatActivity  {
         viewPager.setAdapter(sectionsPagerAdapter);
         db = new Database(this);
 
-
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         fab = findViewById(R.id.fab);
         fab.setBackgroundColor(Color.parseColor("#0096db"));
+        public_sum =findViewById(R.id.public_total);
 
         setupTabIcons();
 
@@ -88,13 +89,20 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    @Override
+    protected void onStart() {
+        sum = db.getTotalSum();
+        public_sum.setText(String.valueOf(sum));
+        super.onStart();
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private void setupTabIcons() {
         tabs.getTabAt(0).setText("");
         tabs.getTabAt(1).setText("");
         tabs.getTabAt(2).setText("");
 
-        tabs.getTabAt(0).setIcon((getResources().getDrawable(R.drawable.ic_inbox)));
+        tabs.getTabAt(0).setIcon((getResources().getDrawable(R.drawable.ic_archive_24)));
         tabs.getTabAt(1).setIcon((getResources().getDrawable(R.drawable.ic_history_24)));
         tabs.getTabAt(2).setIcon((getResources().getDrawable(R.drawable.ic_wallet_24)));
 
@@ -125,6 +133,7 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
+
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.ali.ui.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,6 +23,7 @@ import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,9 +37,8 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
     public static Database db;
     private Deal deal;
     private Handler handler;
-    public static RecycleViewAdapter adapter;
-    private TextView public_total;
-    private double total;
+    private RecycleViewAdapter adapter;
+
 
 
 
@@ -92,19 +94,16 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         db = new Database(this.getContext());
         deals_unactive = new ArrayList<>();
         handler = new Handler();
-        public_total = view.findViewById(R.id.public_total);
         buildRecycleView();
         return view;
     }
 
     private void buildRecycleView() {
-        total = 0;
-        deals_unactive = db.readAllUnactiveDeals(total);
+        deals_unactive = db.readAllUnactiveDeals();
         recyclerView = (RecyclerView) view.findViewById(R.id.inbox_RecycleView);
         adapter = new RecycleViewAdapter(getContext(), deals_unactive,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-//        public_total.setText(String.valueOf(total));
 
 
     }
@@ -117,6 +116,28 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         startActivityForResult(intent,position);
 
     }
+
+    @Override
+    public void onItemLongClick(int position) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+        builder1.setMessage("هل انت متأكد انك تريد حذف هذه المعاملة");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.deleteDealData(String.valueOf(deals_unactive.get(position).getId()));
+                buildRecycleView();
+                dialog.cancel();
+            }
+        });
+        builder1.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        builder1.show();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
