@@ -10,35 +10,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.example.ali.adapters.RecycleViewAdapter;
 import com.example.ali.adapters.TranRecycleViewAdapter;
 import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 import com.example.ali.system.Transaction;
-import com.example.ali.ui.main.Fragment_1;
-import com.example.ali.ui.main.Fragment_2;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -124,7 +113,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
             local_total.setTextColor(getResources().getColor(R.color.red));
         }
         local_total.setText(editPrice(local_sum));
-        deal.setTotal(Double.parseDouble(editPrice(local_sum )));
+        deal.setTotal(local_sum);
         db.updateDealData(deal);
     }
 
@@ -297,7 +286,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     }
 
     private void buildRecycleView(ArrayList<Transaction> tran) {
-        recyclerView = (RecyclerView) findViewById(R.id.transaction_recycleview);
+        recyclerView = (RecyclerView) findViewById(R.id.pocket_RecycleView);
         adapter = new TranRecycleViewAdapter(this,this,tran);
         recyclerView.setLayoutManager(new LinearLayoutManager(DealItem.this));
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);

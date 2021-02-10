@@ -12,8 +12,11 @@ import android.view.ViewGroup;
 
 import com.example.ali.R;
 import com.example.ali.adapters.RecycleViewAdapter;
+import com.example.ali.adapters.TranRecycleViewAdapter;
+import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 import com.example.ali.system.Pocket;
+import com.example.ali.system.Transaction;
 
 import java.util.ArrayList;
 
@@ -22,10 +25,12 @@ import java.util.ArrayList;
  * Use the {@link Fragment_3#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_3 extends Fragment implements RecycleViewAdapter.OnClickItemListener {
+public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnClickTranItemListener {
     private View view;
     private RecyclerView recyclerView;
-    private ArrayList<Deal> item;
+    private ArrayList<Transaction> item;
+    public static TranRecycleViewAdapter adapter;
+    private Database db;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,8 +72,6 @@ public class Fragment_3 extends Fragment implements RecycleViewAdapter.OnClickIt
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        item = new ArrayList<>();
-
 
     }
 
@@ -76,11 +79,18 @@ public class Fragment_3 extends Fragment implements RecycleViewAdapter.OnClickIt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_3,container,false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.pocket_RecycleView);
-        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(),item,this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(recycleViewAdapter);
+        item = new ArrayList<>();
+        db = new Database(getContext());
+        buildRecycleView();
         return view;
+    }
+    private void buildRecycleView() {
+        item = db.readAllPocketTransaction();
+        recyclerView = (RecyclerView) view.findViewById(R.id.pocket_RecycleView);
+        adapter = new TranRecycleViewAdapter(getContext(),this,item);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+
     }
 
 
@@ -89,8 +99,4 @@ public class Fragment_3 extends Fragment implements RecycleViewAdapter.OnClickIt
 
     }
 
-    @Override
-    public void onItemLongClick(int position) {
-
-    }
 }

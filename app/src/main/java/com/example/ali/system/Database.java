@@ -226,6 +226,24 @@ public class Database extends SQLiteOpenHelper {
         return deals;
 
     }
+    public ArrayList<Transaction> readAllPocketTransaction(){
+        String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = "+ null ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        transactions = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()) {
+            tran = new Transaction();
+            tran.setId(cursor.getInt(0));
+            tran.setuID(cursor.getInt(1));
+            tran.settName(cursor.getString(2));
+            tran.settPrice(cursor.getDouble(4));
+            transactions.add(tran);
+        }
+        cursor.close();
+        return transactions;
+
+    }
 
     }
 
