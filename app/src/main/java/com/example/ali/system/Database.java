@@ -145,10 +145,15 @@ public class Database extends SQLiteOpenHelper {
 
         }
     public double getTotalSum(){
-        String query = "SELECT * FROM " + deals_Table +" WHERE "+ active +" = 0" ;
         SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + deals_Table +" WHERE "+ active +" = 0" ;
         Cursor cursor = db.rawQuery(query,null);
         double sum=0;
+        while (cursor.moveToNext()) {
+            sum+=cursor.getDouble(4);
+        }
+        query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = 0" ;
+        cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()) {
             sum+=cursor.getDouble(4);
         }
@@ -227,7 +232,7 @@ public class Database extends SQLiteOpenHelper {
 
     }
     public ArrayList<Transaction> readAllPocketTransaction(){
-        String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = "+ null ;
+        String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = 0" ;
         SQLiteDatabase db = this.getReadableDatabase();
         transactions = new ArrayList<>();
 

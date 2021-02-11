@@ -43,24 +43,24 @@
         </RelativeLayout>
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/purple_500"
-            app:tabTextColor="@color/textColor"
-            app:tabIndicatorColor="@color/blue"
-            app:tabSelectedTextColor="@color/blue"
-            />
+
+           <com.google.android.material.tabs.TabLayout
+               android:id="@+id/tabs"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:background="@color/purple_500"
+               app:tabIndicatorColor="@color/blue"
+               app:tabSelectedTextColor="@color/blue"
+               android:layoutDirection="ltr" />
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
-        />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -72,8 +72,8 @@
         app:borderWidth="0dp"
         tools:ignore="VectorDrawableCompat"
         android:backgroundTint="@color/blue"
-
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        />
 
 
 

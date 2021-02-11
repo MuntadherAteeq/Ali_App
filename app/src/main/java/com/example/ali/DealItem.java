@@ -177,6 +177,21 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
                 DealItem.super.onBackPressed();
             }
         });
+        //on price tag click
+        note_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String text_price=edPrice.getText().toString().trim();
+                if (!text_price.isEmpty()) {
+                    edPrice.setText(String.valueOf(Double.parseDouble(text_price)*-1));
+                    setWidgetFunctions();
+                }
+
+            }
+        });
+
+
 
     }
 
@@ -186,10 +201,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     }
 
     public boolean validatePrice(double iPrice){
-        if (iPrice>1000 || iPrice<-1000){
-            return false;
-        }else if (iPrice<0.005 && iPrice>-0.005)return false;
-        return true;
+        return ((iPrice >= 0.005) && (iPrice < 1000)) || ((iPrice > -1000) && (iPrice <= -0.005));
     }
     @SuppressLint("DefaultLocale")
     public String editPrice(double text){
@@ -295,6 +307,11 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
 
     @Override
     public void onItemClick(int position) {
+
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
 
     }
 

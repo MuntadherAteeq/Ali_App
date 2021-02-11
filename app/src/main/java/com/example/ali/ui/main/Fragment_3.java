@@ -1,15 +1,30 @@
 package com.example.ali.ui.main;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ali.DealItem;
+import com.example.ali.MainActivity;
 import com.example.ali.R;
 import com.example.ali.adapters.RecycleViewAdapter;
 import com.example.ali.adapters.TranRecycleViewAdapter;
@@ -17,8 +32,12 @@ import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 import com.example.ali.system.Pocket;
 import com.example.ali.system.Transaction;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import static android.view.View.VISIBLE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +50,15 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
     private ArrayList<Transaction> item;
     public static TranRecycleViewAdapter adapter;
     private Database db;
+    private TextInputEditText edPrice,edComment;
+    private TextView note_price,public_sum;
+    private View note_Bar;
+    private CardView line;
+    double price ;
+    boolean done =false;
+    Transaction transaction;
+    ImageButton clear_par;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,17 +107,72 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_3,container,false);
+        edPrice = view.findViewById(R.id.pocket_edtext);
+        clear_par = view.findViewById(R.id.clear_bar);
+        edPrice = view.findViewById(R.id.price_text);
+        edComment = view.findViewById(R.id.comment_text);
+        note_Bar = view.findViewById(R.id.price_bar);
+        note_price = view.findViewById(R.id.price_tag);
+        line = view.findViewById(R.id.tag);
+        public_sum = Objects.requireNonNull(getActivity()).findViewById(R.id.public_total);
+        clear_par.setVisibility(VISIBLE);
+
         item = new ArrayList<>();
         db = new Database(getContext());
         buildRecycleView();
+        setOnClickListeners();
         return view;
     }
+
+    private void setOnClickListeners() {
+        MainActivity.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!done){
+
+                    setWidgetFunctions();
+                }else {
+                    transaction = new Transaction();
+                    transaction.settPrice(price);
+                    transaction.settName(edComment.getText().toString().trim());
+                    transaction.setuID(0);
+                    boolean i = db.insert_New_Transaction(transaction);
+                    deletePriceTag();
+                    edPrice.setText("");
+                    edComment.setText("");
+                    public_sum.setText(String.valueOf(db.getTotalSum()));
+                    buildRecycleView();
+                }
+            }
+
+        });
+        note_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String text_price=edPrice.getText().toString().trim();
+                if (!text_price.isEmpty()) {
+                    edPrice.setText(String.valueOf(Double.parseDouble(text_price)*-1));
+                    setWidgetFunctions();
+                }
+
+            }
+        });
+        clear_par.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletePriceTag();
+            }
+        });
+    }
+
     private void buildRecycleView() {
         item = db.readAllPocketTransaction();
         recyclerView = (RecyclerView) view.findViewById(R.id.pocket_RecycleView);
         adapter = new TranRecycleViewAdapter(getContext(),this,item);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        recyclerView.scrollToPosition(item.size()-1);
 
     }
 
@@ -98,5 +181,93 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
     public void onItemClick(int position) {
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @Override
+    public void onItemLongClick(int position) {
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+        builder1.setMessage("هل انت متأكد انك تريد حذف هذه المعاملة");
+        builder1.setCancelable(true);
+        builder1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                adapter.notifyItemChanged(position);
+                dialog.cancel();
+            }
+        });
+        builder1.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.deleteTransactionData(String.valueOf(item.remove(position).getId()));
+                adapter.notifyItemRemoved(position);
+                public_sum.setText(String.valueOf(db.getTotalSum()));
+                dialog.cancel();
+            }
+        });
+        builder1.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        builder1.show();
+    }
+
+
+    public void setWidgetFunctions(){
+        edPrice = view.findViewById(R.id.pocket_edtext);
+        String text_price=edPrice.getText().toString().trim();
+        if (!text_price.isEmpty()){
+
+            double num_price = Double.parseDouble(text_price);
+            if (validatePrice(num_price)){
+
+                if (num_price >0 ){
+                    note_price.setTextColor(getResources().getColor(R.color.green));
+                    line.setCardBackgroundColor(getResources().getColor(R.color.green_dark));
+                    setPriceTage(num_price);
+                    price = num_price;
+                    done = true ;
+
+
+                }else if (num_price<0){
+                    note_price.setTextColor(getResources().getColor(R.color.red));
+                    line.setCardBackgroundColor(getResources().getColor(R.color.red_dark));
+                    setPriceTage(num_price);
+                    price = num_price;
+                    done =true ;
+
+                }else {
+                    edPrice.setText("");
+                }
+
+            }
+
+        }
+
+    }
+    private void deletePriceTag(){
+        note_Bar.setVisibility(View.GONE);
+        edComment.setVisibility(View.GONE);
+        note_Bar.clearFocus();
+        edPrice.setVisibility(VISIBLE);
+        edPrice.requestFocus();
+        price = 0;
+        done=false ;
+    }
+    public boolean validatePrice(double iPrice){
+        return ((iPrice >= 0.005) && (iPrice < 1000)) || ((iPrice > -1000) && (iPrice <= -0.005));
+    }
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    private void setPriceTage(double num_price){
+        edPrice.setVisibility(View.GONE);
+        edComment.setVisibility(VISIBLE);
+        edPrice.clearFocus();
+        edComment.requestFocus();
+        price = Double.parseDouble(edPrice.getText().toString().trim());
+        note_Bar.setVisibility(VISIBLE);
+        note_price.setText(String.format("%.3f", num_price)+" BD");
+        done =true ;
+    }
+
 
 }

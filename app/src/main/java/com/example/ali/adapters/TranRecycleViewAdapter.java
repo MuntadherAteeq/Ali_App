@@ -1,27 +1,18 @@
 package com.example.ali.adapters;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ali.DealItem;
 import com.example.ali.R;
 import com.example.ali.system.Transaction;
 
@@ -80,14 +71,31 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
             case 1 :
                 holder.Pname.setText(item.get(position).gettName());
                 if (item.get(position).gettName().length()==0)holder.Pname.setVisibility(View.GONE);
+                else holder.Pname.setVisibility(View.VISIBLE);
                 holder.Pprice.setText(String.format("%.3f", item.get(position).gettPrice())+" BD");
+                holder.po_toolbar.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        OnClickTranItemListener.onItemLongClick(position);
+                        return false;
+                    }
+                });
                 break;
             case -1 :
                 holder.Nname.setText(item.get(position).gettName());
                 if (item.get(position).gettName().length()==0)holder.Nname.setVisibility(View.GONE);
+                else holder.Nname.setVisibility(View.VISIBLE);
                 holder.Nprice.setText(String.format("%.3f", item.get(position).gettPrice())+" BD");
+                holder.ne_toolbar.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        OnClickTranItemListener.onItemLongClick(position);
+                        return false;
+                    }
+                });
                 break;
         }
+
 
 
         // holder.X.setText(item.get(position));
@@ -104,6 +112,8 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
         // initialize layout elemnts here
 
        TextView Pprice ,Pname,Nprice,Nname ;
+       View ne_toolbar,po_toolbar;
+
 
 
         TranViewHolder(@NonNull View itemView, final OnClickTranItemListener OnClickTranItemListener) {
@@ -117,6 +127,22 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
 
             Pprice = itemView.findViewById(R.id.price_positive_tag);
             Pname = itemView.findViewById(R.id.comment_psitive_text);
+
+            po_toolbar= itemView.findViewById(R.id.po_toolbar);
+            ne_toolbar=itemView.findViewById(R.id.ne_toolbar);
+
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    OnClickTranItemListener.onItemLongClick(getAdapterPosition());
+                    return false;
+                }
+            });
+
+
+
+
 
             //Animate Recyclerview
          /*
@@ -141,6 +167,7 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
 
     public interface OnClickTranItemListener {
         void onItemClick(int position);
+        void onItemLongClick(int position);
     }
 }
 

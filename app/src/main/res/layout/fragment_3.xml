@@ -23,21 +23,21 @@
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/cardView4"
+       app:layout_constraintStart_toEndOf="@+id/negative_item"
        tools:ignore="MissingConstraints"/>
 
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/pocket_RecycleView"
        android:layout_width="match_parent"
        android:layout_height="0dp"
-       app:layout_constraintBottom_toTopOf="@+id/cardView4"
+       app:layout_constraintBottom_toTopOf="@+id/negative_item"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toTopOf="parent"
        app:layout_goneMarginBottom="50dp" />
 
    <androidx.cardview.widget.CardView
-       android:id="@+id/cardView4"
+       android:id="@+id/negative_item"
        android:layout_width="0dp"
        android:layout_height="wrap_content"
        android:layout_marginStart="10dp"
@@ -74,7 +74,7 @@
 
          <com.google.android.material.textfield.TextInputEditText
              android:imeOptions="actionDone"
-             android:id="@+id/price_text"
+             android:id="@+id/pocket_edtext"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_below="@+id/price_bar"
@@ -85,7 +85,7 @@
              android:layout_marginBottom="5dp"
              android:background="@null"
              android:hint="ادخل السعر ...."
-             android:inputType="numberSigned|numberDecimal"
+             android:inputType="numberSigned|numberDecimal|number"
              android:maxHeight="150dp"
              android:minHeight="40dp"
              android:scrollbars="vertical"

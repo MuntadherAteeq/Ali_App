@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity  {
 
     private TabLayout tabs;
-    private FloatingActionButton fab;
+    public static FloatingActionButton fab;
     public static int request_Code=-1;
     private Database db;
 
@@ -77,11 +77,6 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NewDealActivity.class);
                 startActivityForResult(intent,0);
-
-                //deals.add(new Deal());
-                //Fragment_1.adapter.notifyItemInserted(0);
-                //Fragment_1.recyclerView.scrollToPosition(0);
-
             }
     });
 
@@ -111,7 +106,16 @@ public class MainActivity extends AppCompatActivity  {
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
                 switch (tab.getPosition()){
-                    case 0:fab.setImageResource(R.drawable.ic_add_24);break;
+                    case 0:
+                        fab.setImageResource(R.drawable.ic_add_24);
+                        fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, NewDealActivity.class);
+                            startActivityForResult(intent,0);
+                        }
+                    });
+                        break;
                     case 1:fab.setImageResource(R.drawable.ic_search_24);break;
                     case 2:fab.setImageResource(R.drawable.ic_wallet_24);break;
                 }
@@ -126,6 +130,8 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
+
+
 
     }
 
