@@ -102,8 +102,8 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
-    public boolean deleteTransactionData(String id){
-
+    public boolean deleteTransactionData(Transaction tran){
+        String id =String.valueOf(tran.getId());
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(transaction_Table, "id=?",new String[]{id});
         return result != -1;

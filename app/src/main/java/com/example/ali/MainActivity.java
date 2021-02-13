@@ -26,6 +26,9 @@ import android.widget.Toast;
 import com.example.ali.ui.main.SectionsPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import static java.lang.String.format;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity  {
     public static FloatingActionButton fab;
     public static int request_Code=-1;
     private Database db;
+    private TextView public_sum;
 
 
     @Override
@@ -60,6 +64,9 @@ public class MainActivity extends AppCompatActivity  {
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         db = new Database(this);
+        setPublicTotal();
+
+
 
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
@@ -82,6 +89,18 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    @SuppressLint("DefaultLocale")
+    public void setPublicTotal() {
+        public_sum =findViewById(R.id.public_total);
+        double num =db.getTotalSum();
+        String text= String.format("%.3f", num);
+        if (num>0){
+            public_sum.setTextColor(getResources().getColor(R.color.green));
+        }else {
+            public_sum.setTextColor(getResources().getColor(R.color.red));
+        }
+        public_sum.setText(text);
+    }
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -116,7 +135,14 @@ public class MainActivity extends AppCompatActivity  {
                         }
                     });
                         break;
-                    case 1:fab.setImageResource(R.drawable.ic_search_24);break;
+                    case 1:
+                        fab.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(MainActivity.this, "قيد الانشاء", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        fab.setImageResource(R.drawable.ic_search_24);break;
                     case 2:fab.setImageResource(R.drawable.ic_wallet_24);break;
                 }
 

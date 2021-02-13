@@ -337,7 +337,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
             });
             builder1.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            db.deleteTransactionData(String.valueOf(transactions.remove(position).getId()));
+                            db.deleteTransactionData(transactions.remove(position));
                             adapter.notifyItemRemoved(position);
                             initLocal_sum();
                             dialog.cancel();

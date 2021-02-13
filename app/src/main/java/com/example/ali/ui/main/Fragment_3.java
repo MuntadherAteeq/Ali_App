@@ -140,7 +140,7 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
                     deletePriceTag();
                     edPrice.setText("");
                     edComment.setText("");
-                    public_sum.setText(String.valueOf(db.getTotalSum()));
+                    setPublicTotal();
                     buildRecycleView();
                 }
             }
@@ -198,14 +198,15 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         });
         builder1.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                db.deleteTransactionData(String.valueOf(item.remove(position).getId()));
+                db.deleteTransactionData(item.remove(position));
                 adapter.notifyItemRemoved(position);
-                public_sum.setText(String.valueOf(db.getTotalSum()));
+                setPublicTotal();
                 dialog.cancel();
             }
         });
         builder1.setNegativeButton("لا", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -253,6 +254,17 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         edPrice.requestFocus();
         price = 0;
         done=false ;
+    }
+    public void setPublicTotal() {
+
+        double num =db.getTotalSum();
+        @SuppressLint("DefaultLocale") String text= String.format("%.3f", num);
+        if (num>0){
+            public_sum.setTextColor(getResources().getColor(R.color.green));
+        }else {
+            public_sum.setTextColor(getResources().getColor(R.color.red));
+        }
+        public_sum.setText(text);
     }
     public boolean validatePrice(double iPrice){
         return ((iPrice >= 0.005) && (iPrice < 1000)) || ((iPrice > -1000) && (iPrice <= -0.005));

@@ -1,5 +1,6 @@
 package com.example.ali.ui.main;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -101,16 +102,27 @@ public class Fragment_2 extends Fragment implements RecycleViewAdapter.OnClickIt
         return view;
     }
 
+    @SuppressLint("DefaultLocale")
     private void buildRecycleView() {
         deals_unactive = db.readAllUnactiveDeals();
         recyclerView = (RecyclerView) view.findViewById(R.id.inbox_RecycleView);
         adapter = new RecycleViewAdapter(getContext(), deals_unactive,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        sum = db.getTotalSum();
-        public_sum.setText(String.valueOf(sum));
+        setPublicTotal();
 
 
+    }
+    public void setPublicTotal() {
+
+        double num =db.getTotalSum();
+        @SuppressLint("DefaultLocale") String text= String.format("%.3f", num);
+        if (num>0){
+            public_sum.setTextColor(getResources().getColor(R.color.green));
+        }else {
+            public_sum.setTextColor(getResources().getColor(R.color.red));
+        }
+        public_sum.setText(text);
     }
 
     @Override
