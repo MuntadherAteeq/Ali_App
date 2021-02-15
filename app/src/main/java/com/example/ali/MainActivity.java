@@ -1,6 +1,7 @@
 package com.example.ali;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import com.example.ali.system.Database;
 import com.example.ali.system.Deal;
 import com.example.ali.ui.main.Fragment_1;
 import com.example.ali.ui.main.Fragment_2;
+import com.example.ali.ui.main.Fragment_3;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -24,19 +26,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ali.ui.main.SectionsPagerAdapter;
+import com.google.android.material.textfield.TextInputEditText;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static android.view.View.VISIBLE;
 import static java.lang.String.format;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
-    private TabLayout tabs;
+    public static TabLayout tabs;
     public static FloatingActionButton fab;
     public static int request_Code=-1;
     private Database db;
     private TextView public_sum;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    ViewPager viewPager;
+    private OnPocketFabClicked onPocketFabClicked;
+
+
+
+    public interface OnPocketFabClicked{
+        void onClick();
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if (fragment instanceof OnPocketFabClicked) {
+            onPocketFabClicked = (OnPocketFabClicked) fragment;
+        }
+    }
 
 
     @Override
@@ -60,12 +83,11 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         db = new Database(this);
         setPublicTotal();
-
 
 
         tabs = findViewById(R.id.tabs);
@@ -123,6 +145,7 @@ public class MainActivity extends AppCompatActivity  {
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 tab.getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
                 switch (tab.getPosition()){
                     case 0:
@@ -136,14 +159,17 @@ public class MainActivity extends AppCompatActivity  {
                     });
                         break;
                     case 1:
+                        fab.setOnClickListener(null);
+                        fab.setImageResource(R.drawable.ic_search_24);break;
+                    case 2:
                         fab.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(MainActivity.this, "قيد الانشاء", Toast.LENGTH_SHORT).show();
+                                onPocketFabClicked.onClick();
                             }
                         });
-                        fab.setImageResource(R.drawable.ic_search_24);break;
-                    case 2:fab.setImageResource(R.drawable.ic_wallet_24);break;
+                        fab.setImageResource(R.drawable.ic_wallet_24);break;
+
                 }
 
             }
@@ -160,6 +186,8 @@ public class MainActivity extends AppCompatActivity  {
 
 
     }
+
+
 
 }
 

@@ -126,8 +126,8 @@ public class Database extends SQLiteOpenHelper {
         }
 
     }
-    public ArrayList<Transaction> readAllTransactions(String id){
-        String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = "+ id ;
+    public ArrayList<Transaction> readAllTransactions(String uID){
+        String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = "+ uID ;
         SQLiteDatabase db = this.getReadableDatabase();
         transactions = new ArrayList<>();
 

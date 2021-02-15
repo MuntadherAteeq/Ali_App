@@ -1,7 +1,9 @@
 package com.example.ali.ui.main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,27 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ali.DealItem;
 import com.example.ali.MainActivity;
 import com.example.ali.R;
-import com.example.ali.adapters.RecycleViewAdapter;
 import com.example.ali.adapters.TranRecycleViewAdapter;
 import com.example.ali.system.Database;
-import com.example.ali.system.Deal;
-import com.example.ali.system.Pocket;
 import com.example.ali.system.Transaction;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -44,7 +39,7 @@ import static android.view.View.VISIBLE;
  * Use the {@link Fragment_3#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnClickTranItemListener {
+public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnClickTranItemListener, MainActivity.OnPocketFabClicked {
     private View view;
     private RecyclerView recyclerView;
     private ArrayList<Transaction> item;
@@ -54,10 +49,12 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
     private TextView note_price,public_sum;
     private View note_Bar;
     private CardView line;
-    double price ;
+    double price;
     boolean done =false;
     Transaction transaction;
     ImageButton clear_par;
+
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -109,7 +106,6 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         view = inflater.inflate(R.layout.fragment_3,container,false);
         edPrice = view.findViewById(R.id.pocket_edtext);
         clear_par = view.findViewById(R.id.clear_bar);
-        edPrice = view.findViewById(R.id.price_text);
         edComment = view.findViewById(R.id.comment_text);
         note_Bar = view.findViewById(R.id.price_bar);
         note_price = view.findViewById(R.id.price_tag);
@@ -121,15 +117,14 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         db = new Database(getContext());
         buildRecycleView();
         setOnClickListeners();
+
+
         return view;
     }
 
-    private void setOnClickListeners() {
-        MainActivity.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!done){
+    public void setOnClickListeners() {
 
+                if (!done){
                     setWidgetFunctions();
                 }else {
                     transaction = new Transaction();
@@ -143,9 +138,10 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
                     setPublicTotal();
                     buildRecycleView();
                 }
-            }
 
-        });
+
+
+
         note_price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,12 +154,15 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
 
             }
         });
+
         clear_par.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deletePriceTag();
             }
         });
+
+
     }
 
     private void buildRecycleView() {
@@ -192,14 +191,13 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         builder1.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                adapter.notifyItemChanged(position);
                 dialog.cancel();
             }
         });
         builder1.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                db.deleteTransactionData(item.remove(position));
-                adapter.notifyItemRemoved(position);
+                db.deleteTransactionData(item.get(position));
+                buildRecycleView();
                 setPublicTotal();
                 dialog.cancel();
             }
@@ -253,7 +251,7 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         edPrice.setVisibility(VISIBLE);
         edPrice.requestFocus();
         price = 0;
-        done=false ;
+        done=false;
     }
     public void setPublicTotal() {
 
@@ -265,6 +263,7 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
             public_sum.setTextColor(getResources().getColor(R.color.red));
         }
         public_sum.setText(text);
+
     }
     public boolean validatePrice(double iPrice){
         return ((iPrice >= 0.005) && (iPrice < 1000)) || ((iPrice > -1000) && (iPrice <= -0.005));
@@ -278,8 +277,12 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         price = Double.parseDouble(edPrice.getText().toString().trim());
         note_Bar.setVisibility(VISIBLE);
         note_price.setText(String.format("%.3f", num_price)+" BD");
-        done =true ;
+        done =true;
     }
 
 
+    @Override
+    public void onClick() {
+        setOnClickListeners();
+    }
 }
