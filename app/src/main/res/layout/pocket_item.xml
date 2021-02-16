@@ -24,7 +24,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="3dp"
         app:cardCornerRadius="30dp"
         tools:ignore="ExtraText,MissingConstraints">
 
@@ -41,9 +41,13 @@
             android:layout_centerHorizontal="true"
             android:contentDescription="TODO"
             android:src="@drawable/image"
-/>        <!--
-        android:contentDescription="@string/todo"
-        app:srcCompat="@drawable/"-->
+/>
+        <View
+            android:id="@+id/image_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone"/>
 
 
     </androidx.cardview.widget.CardView>
@@ -53,15 +57,13 @@
         android:id="@+id/chat_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/line"
+        android:layout_alignLeft="@+id/line"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginLeft="14dp"
         android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/cardView"
-        android:layout_toRightOf="@+id/cardView"
-        android:textColor="@color/white"
         android:gravity="center_vertical"
         android:text="Jan Koum"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <TextView
@@ -88,8 +90,6 @@
         android:layout_below="@id/chat_name_txt"
         android:layout_alignStart="@+id/chat_name_txt"
         android:layout_alignLeft="@+id/chat_name_txt"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="9dp"
         android:textColor="@color/textColor"

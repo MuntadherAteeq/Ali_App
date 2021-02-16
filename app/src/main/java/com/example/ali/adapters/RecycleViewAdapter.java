@@ -3,6 +3,7 @@ package com.example.ali.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.DragEvent;
@@ -44,6 +45,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @Override
     public int getItemViewType(int position) {
+
      return position;
     }
 
@@ -61,8 +63,15 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public void onBindViewHolder(@NonNull final myViewHolder holder, final int position) {
         // Putting information into each view holder by it position
        holder.name_text.setText(item.get(position).getName());
-         holder.phone_text.setText(item.get(position).getPhone());
-      holder.date_text.setText(item.get(position).getDate());
+       holder.phone_text.setText(item.get(position).getPhone());
+       holder.date_text.setText(item.get(position).getDate());
+       if (item.get(position).isActive()){
+           holder.image_shadow.setVisibility(View.GONE);
+           holder.name_text.setTextColor(context.getResources().getColor(R.color.white));
+       }else {
+           holder.image_shadow.setVisibility(View.VISIBLE);
+           holder.name_text.setTextColor(context.getResources().getColor(R.color.textColor));
+       }
     }
 
     @Override
@@ -80,6 +89,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         // initialize layout elemnts here
 
       TextView name_text,date_text,phone_text ;
+      View image_shadow;
         /*
         LinearLayout ;
         CardView ;
@@ -110,6 +120,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
              name_text = itemView.findViewById(R.id.chat_name_txt);
              phone_text = itemView.findViewById(R.id.chat_phone_text);
              date_text = itemView.findViewById(R.id.chat_date_txt);
+             image_shadow = itemView.findViewById(R.id.image_shadow);
+
 
 
 
