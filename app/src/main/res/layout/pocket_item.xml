@@ -90,13 +90,47 @@
         android:layout_below="@id/chat_name_txt"
         android:layout_alignStart="@+id/chat_name_txt"
         android:layout_alignLeft="@+id/chat_name_txt"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="9dp"
         android:textColor="@color/textColor"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Hey! How are you?"
         android:textSize="12sp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:layout_below="@+id/chat_date_txt"
+        android:layout_alignEnd="@+id/chat_date_txt"
+        android:layout_alignRight="@+id/chat_date_txt"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="20dp"
+        android:padding="0dp"
+        app:cardBackgroundColor="@color/green_dark"
+        app:cardCornerRadius="8dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:gravity="center_horizontal"
+                android:text="0.000"
+                android:textAlignment="center"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/line"
@@ -110,7 +144,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="30dp"
         android:background="#30828282"

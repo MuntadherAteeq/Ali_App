@@ -2,11 +2,23 @@ package com.example.ali;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -27,17 +39,14 @@ import java.util.Date;
 import java.util.Objects;
 
 public class NewDealActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
-    Button submit;
+    Button submit,getFromContactButton;
     TextInputLayout tilName,tilPhone,tilBuilding,tilRoad,tilDate,tilImage;
     String name,phone,road,building,date,image;
     Deal deal;
     Database db;
     TextView date_picker;
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-
-
-
-
+    private int pickContact;
 
 
     @Override
@@ -140,6 +149,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         tilBuilding=findViewById(R.id.building_field);
         tilRoad=findViewById(R.id.road_field);
         date_picker = findViewById(R.id.date_picker);
+        getFromContactButton =findViewById(R.id.choose_from_content);
 
         tilName.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -166,11 +176,13 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 validatePhone();
+                if (!getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()).equals("?")){
+                    tilName.getEditText().setText(getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()));
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -192,6 +204,12 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
 
 
     });
+        getFromContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContact(v);
+            }
+        });
 }
 
     @Override
@@ -208,6 +226,106 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         date = currentDate;
 
     }
+    public void getContact(View view) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 10);
+        }
+
+        Intent contactsIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        this.pickContact = 1;
+        startActivityForResult(contactsIntent, this.pickContact);
+    }
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data){
+        super.onActivityResult(reqCode, resultCode, data);
+
+        if(reqCode == this.pickContact){
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactData = data.getData();
+                Cursor contact =  getContentResolver().query(contactData, null, null, null, null);
+
+                if (contact.moveToFirst()) {
+                    String name = contact.getString(contact.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    // TODO Whatever you want to do with the selected contact's name.
+
+                    ContentResolver cr = getContentResolver();
+                    Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, "DISPLAY_NAME = '" + name + "'", null, null);
+                    if (cursor.moveToFirst()) {
+                        String contactId =
+                                cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                        //
+                        //  Get all phone numbers.
+                        //
+                        Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                        while (phones.moveToNext()) {
+                            String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            String Cname = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                            Toast.makeText(this, getContactDisplayNameByNumber(number), Toast.LENGTH_SHORT).show();
+                            if (number.contains("+973")){
+                                number =  number.substring(4).trim();
+
+                            }
+
+                            tilPhone.getEditText().setText(number);
+                            tilName.getEditText().setText(Cname);
+
+                            int type = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                            switch (type) {
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                                    // do something with the Home number here...
+
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                                    // do something with the Mobile number here...
+                                  //  Toast.makeText(this, "mobile : "+ number, Toast.LENGTH_SHORT).show();
+                                  //  Toast.makeText(this, "Name : "+Cname, Toast.LENGTH_SHORT).show();
+                                    break;
+                                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                                    // do something with the Work number here...
+                                  //  Toast.makeText(this, "work : "+ number, Toast.LENGTH_SHORT).show();
+                                 //   Toast.makeText(this, "Name : "+Cname, Toast.LENGTH_SHORT).show();
+
+                                    break;
+                            }
+                        }
+                        phones.close();
+                    }
+                    cursor.close();
+                }
+            }
+        }else{
+            Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public  String getContactDisplayNameByNumber(String number) {
+        Uri uri = Uri.withAppendedPath(
+                ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+                Uri.encode(number));
+        String name = "?";
+
+        ContentResolver contentResolver = this.getContentResolver();
+        Cursor contactLookup = contentResolver.query(uri, new String[] {
+                        BaseColumns._ID, ContactsContract.PhoneLookup.DISPLAY_NAME },
+                null, null, null);
+
+        try {
+            if (contactLookup != null && contactLookup.getCount() > 0) {
+                contactLookup.moveToNext();
+                name = contactLookup.getString(contactLookup
+                        .getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
+                // String contactId =
+                // contactLookup.getString(contactLookup.getColumnIndex(BaseColumns._ID));
+            }
+        } finally {
+            if (contactLookup != null) {
+                contactLookup.close();
+            }
+        }
+
+        return name;
+    }
+
     }
 
 
