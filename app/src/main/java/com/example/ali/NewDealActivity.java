@@ -1,16 +1,16 @@
 package com.example.ali;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -47,7 +47,13 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
     TextView date_picker;
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
     private int pickContact;
+    private Boolean contextPermission;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        contextPermission = ContextCompat.checkSelfPermission(NewDealActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
                     }else {
                         Toast.makeText(NewDealActivity.this, "There was something wrong", Toast.LENGTH_SHORT).show();
                     }
+
                 }
                 
             }
@@ -176,9 +183,14 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 validatePhone();
-                if (!getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()).equals("?")){
-                    tilName.getEditText().setText(getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()));
+                if (contextPermission){
+                    if (!getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()).equals("?")){
+                        tilName.getEditText().setText(getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()));
+                    }
                 }
+
+
+
             }
 
             @Override
@@ -207,10 +219,22 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         getFromContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getContact(v);
+                if (contextPermission){
+                    getContact(v);
+                }else {
+                    requestContactsPermission();
+                }
             }
         });
 }
+private void requestContactsPermission(){
+        if (!contextPermission) ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},99);
+}
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        contextPermission = ContextCompat.checkSelfPermission(NewDealActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -239,7 +263,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
     public void onActivityResult(int reqCode, int resultCode, Intent data){
         super.onActivityResult(reqCode, resultCode, data);
 
-        if(reqCode == this.pickContact){
+        if(contextPermission){
             if (resultCode == Activity.RESULT_OK) {
                 Uri contactData = data.getData();
                 Cursor contact =  getContentResolver().query(contactData, null, null, null, null);
@@ -258,36 +282,20 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
                         //
                         Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+
                         while (phones.moveToNext()) {
-                            String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            String Cname = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                            Toast.makeText(this, getContactDisplayNameByNumber(number), Toast.LENGTH_SHORT).show();
-                            if (number.contains("+973")){
-                                number =  number.substring(4).trim();
-
+                            if (phones.getPosition()==0){
+                                String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                String Cname = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                                if (number.contains("+973")){
+                                    number = number.replace("+973","").trim();
+                                    number.contains(" ");
+                                    number = number.replace(" ","");
+                                }
+                                tilName.getEditText().setText(Cname);
+                                tilPhone.getEditText().setText(number);
                             }
 
-                            tilPhone.getEditText().setText(number);
-                            tilName.getEditText().setText(Cname);
-
-                            int type = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                            switch (type) {
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                                    // do something with the Home number here...
-
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                                    // do something with the Mobile number here...
-                                  //  Toast.makeText(this, "mobile : "+ number, Toast.LENGTH_SHORT).show();
-                                  //  Toast.makeText(this, "Name : "+Cname, Toast.LENGTH_SHORT).show();
-                                    break;
-                                case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                                    // do something with the Work number here...
-                                  //  Toast.makeText(this, "work : "+ number, Toast.LENGTH_SHORT).show();
-                                 //   Toast.makeText(this, "Name : "+Cname, Toast.LENGTH_SHORT).show();
-
-                                    break;
-                            }
                         }
                         phones.close();
                     }
@@ -297,12 +305,16 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         }else{
             Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
         }
+
+
     }
+
     public  String getContactDisplayNameByNumber(String number) {
+        String name = "?";
+        if (contextPermission){
         Uri uri = Uri.withAppendedPath(
                 ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
                 Uri.encode(number));
-        String name = "?";
 
         ContentResolver contentResolver = this.getContentResolver();
         Cursor contactLookup = contentResolver.query(uri, new String[] {
@@ -322,9 +334,11 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
                 contactLookup.close();
             }
         }
-
+        }
         return name;
     }
+
+
 
     }
 
