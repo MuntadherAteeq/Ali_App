@@ -6,16 +6,26 @@ public class Transaction {
     private String tName;
     private double tPrice;
     private String date;
+    private String time;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public Transaction(){
     }
 
-    public Transaction(int id, int uID, String tName, double tPrice) {
+    public Transaction(int id, int uID, String tName, double tPrice,String time,String date) {
         this.id = id;
         this.uID = uID;
         this.tName = tName;
         this.tPrice = tPrice;
-
+        this.time = time;
+        this.date = date;
     }
 
     public String getDate() {
@@ -25,7 +35,7 @@ public class Transaction {
     public void setDate(String date) {
         this.date = date;
     }
-
+    
     public int getId() {
         return id;
     }

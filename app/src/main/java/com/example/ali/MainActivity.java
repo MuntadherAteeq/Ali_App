@@ -165,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
                         fab.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                onPocketFabClicked.onClick();
+                                try {
+                                    onPocketFabClicked.onClick();
+                                }catch (Exception e){}
                             }
                         });
                         fab.setImageResource(R.drawable.ic_wallet_24);break;

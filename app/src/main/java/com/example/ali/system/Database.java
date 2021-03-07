@@ -6,11 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
     private String deals_Table = "deals";
@@ -30,6 +38,8 @@ public class Database extends SQLiteOpenHelper {
     private ArrayList<Deal> deals;
     private Deal deal;
     Transaction tran;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd_h:mm a");
+
 
 
     public Database(@Nullable Context context) {
@@ -61,11 +71,15 @@ public class Database extends SQLiteOpenHelper {
         return insert != -1;
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Boolean insert_New_Transaction(Transaction tran) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
+        Date now = new Date();
+        tran.setDate(dateFormat.format(now));
+
         cv.put(name,tran.gettName());
-        // cv.put(date,tran.getDate());
+        cv.put(date,tran.getDate());
         cv.put(price,tran.gettPrice());
         cv.put(uid,tran.getuID());
 
@@ -130,14 +144,34 @@ public class Database extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = "+ uID ;
         SQLiteDatabase db = this.getReadableDatabase();
         transactions = new ArrayList<>();
+        String date = "";
 
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()) {
+
             tran = new Transaction();
             tran.setId(cursor.getInt(0));
             tran.setuID(cursor.getInt(1));
             tran.settName(cursor.getString(2));
+            String string = cursor.getString(3);
+            if (string != null && string.contains("_")){
+                    String[] parts = string.split("_");
+                    tran.setTime(parts[1]);
+                    tran.setDate(parts[0]);
+            }else {
+                    tran.setTime("");
+                    tran.setDate("");
+                }
             tran.settPrice(cursor.getDouble(4));
+
+            if (!tran.getDate().equals(date)){
+                date = tran.getDate();
+
+
+                Transaction tr = new Transaction(0,0,"",0.0,tran.getTime(),tran.getDate());
+                transactions.add(tr);
+            }
+
             transactions.add(tran);
         }
         cursor.close();
@@ -231,17 +265,29 @@ public class Database extends SQLiteOpenHelper {
         return deals;
 
     }
+
     public ArrayList<Transaction> readAllPocketTransaction(){
+        Date d = new Date();
+        
+
         String query = "SELECT * FROM " + transaction_Table +" WHERE "+ uid +" = 0" ;
         SQLiteDatabase db = this.getReadableDatabase();
         transactions = new ArrayList<>();
-
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()) {
             tran = new Transaction();
             tran.setId(cursor.getInt(0));
             tran.setuID(cursor.getInt(1));
             tran.settName(cursor.getString(2));
+            String string = cursor.getString(3);
+            if (string != null && string.contains("_")){
+                String[] parts = string.split("_");
+                tran.setTime(parts[1]);
+                tran.setDate(parts[0]);
+            }else {
+                tran.setTime("");
+                tran.setDate("");
+            }
             tran.settPrice(cursor.getDouble(4));
             transactions.add(tran);
         }

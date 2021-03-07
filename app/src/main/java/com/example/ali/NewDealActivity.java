@@ -1,4 +1,4 @@
-package com.example.ali;
+ package com.example.ali;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
@@ -45,8 +46,8 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
     Deal deal;
     Database db;
     TextView date_picker;
+    @SuppressLint("SimpleDateFormat")
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-    private int pickContact;
     private Boolean contextPermission;
 
     @Override
@@ -62,7 +63,6 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         deal = new Deal();
         db = new Database(this);
         confirmInputs();
-
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,13 +85,10 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
                 
             }
         });
-
- 
-
-
     }
 
     private boolean validateName(){
+
         String vName = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
         if (vName.isEmpty()){
             tilName.setError(null);
@@ -106,6 +103,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         }
         return false;
     }
+
     private boolean validatePhone(){
         String vPhone = Objects.requireNonNull( tilPhone.getEditText()).getText().toString().trim();
         if (vPhone.isEmpty()){
@@ -121,6 +119,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         }
         return false;
     }
+
     private boolean validateBuilding(){
         String vBuilding = Objects.requireNonNull( tilBuilding.getEditText()).getText().toString().trim();
 
@@ -134,6 +133,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         }
         return false;
     }
+
     private boolean validateRoad(){
         String vRoad = Objects.requireNonNull( tilPhone.getEditText()).getText().toString().trim();
 
@@ -148,8 +148,8 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
         return false;
     }
 
-
     private void confirmInputs() {
+
         submit = findViewById(R.id.submit_button);
         tilName=findViewById(R.id.name_field);
         tilPhone=findViewById(R.id.phone_filed);
@@ -174,6 +174,7 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
 
             }
         });
+
         tilPhone.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -184,9 +185,12 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 validatePhone();
                 if (contextPermission){
+
                     if (!getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()).equals("?")){
                         tilName.getEditText().setText(getContactDisplayNameByNumber(tilPhone.getEditText().getText().toString()));
                     }
+
+
                 }
 
 
@@ -198,12 +202,9 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
             }
         });
 
-
         Date newDate = new Date();
         this.date  = dateFormat.format(newDate);
         date_picker.setText(this.date);
-
-
 
         date_picker.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -216,19 +217,18 @@ public class NewDealActivity extends AppCompatActivity implements DatePickerDial
 
 
     });
+
         getFromContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (contextPermission){
-                    getContact(v);
-                }else {
-                    requestContactsPermission();
-                }
+                if (contextPermission)getContact(v);
+                requestContactsPermission();
             }
         });
+
 }
 private void requestContactsPermission(){
-        if (!contextPermission) ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},99);
+        if (!contextPermission) ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},10);
 }
 
     @Override
@@ -250,14 +250,16 @@ private void requestContactsPermission(){
         date = currentDate;
 
     }
+
     public void getContact(View view) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 10);
+        if (!contextPermission) {
+            requestContactsPermission();
+        }else {
+            Intent contactsIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            int pickContact = 1;
+            startActivityForResult(contactsIntent, pickContact);
         }
 
-        Intent contactsIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        this.pickContact = 1;
-        startActivityForResult(contactsIntent, this.pickContact);
     }
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data){

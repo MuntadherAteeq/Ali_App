@@ -127,6 +127,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         });
         // on send icon press
         imageButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (!done){
@@ -210,7 +211,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     public void setWidgetFunctions(){
         String text_price=edPrice.getText().toString().trim();
         if (!text_price.isEmpty()){
-
+            try {
             double num_price = Double.parseDouble(text_price);
             if (validatePrice(num_price)){
 
@@ -234,6 +235,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
                 }
 
             }else Toast.makeText(DealItem.this, "السعر مرفوض", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){}
 
         }
 
@@ -305,15 +307,12 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onItemClick(int position) {
-
-    }
 
     @Override
-    public void onItemLongClick(int position) {
+    public void onItemClick(int position) { }
 
-    }
+    @Override
+    public void onItemLongClick(int position) { }
 
     ItemTouchHelper.SimpleCallback simpleCallback =new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
