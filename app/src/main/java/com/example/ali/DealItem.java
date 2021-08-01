@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -54,6 +56,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     Deal deal;
     Handler handler;
     String position;
+    ConstraintLayout info_Container;
 
 
 
@@ -97,7 +100,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         local_total = findViewById(R.id.local_price);
         line = findViewById(R.id.tag);
         back_arrow = findViewById(R.id.back_arrow);
-
+        info_Container = findViewById(R.id.info_container);
 
     }
 
@@ -191,8 +194,12 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
 
             }
         });
+        info_Container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
+            }
+        });
 
     }
 
