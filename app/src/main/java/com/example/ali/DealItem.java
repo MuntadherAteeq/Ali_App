@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -72,16 +71,19 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
 
 
     private void setLayoutView() {
+
         clear_par.setVisibility(VISIBLE);
+
         dealer_name.setText(deal.getName());
-        if (deal.isActive()){
-            active_switch.setChecked(false);
-        }else {
-            active_switch.setChecked(true);
-        }
+
+        active_switch.setChecked(!deal.isActive());
+
         edPrice.clearFocus();
+
         setWidgetFunctions();
+
         onClickListeners();
+
         initLocal_sum();
 
     }
@@ -110,11 +112,9 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
         for (Transaction tran : transactions){
             local_sum += tran.gettPrice();
         }
-        if (local_sum>0){
-            local_total.setTextColor(getResources().getColor(R.color.green));
-        }else{
-            local_total.setTextColor(getResources().getColor(R.color.red));
-        }
+        if (local_sum>0) local_total.setTextColor(getResources().getColor(R.color.green));
+        else local_total.setTextColor(getResources().getColor(R.color.red));
+
         local_total.setText(editPrice(local_sum));
         deal.setTotal(local_sum);
         db.updateDealData(deal);
@@ -122,12 +122,7 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
 
     private void onClickListeners() {
         // on X icon press
-        clear_par.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deletePriceTag();
-            }
-        });
+        clear_par.setOnClickListener(v -> deletePriceTag());
         // on send icon press
         imageButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -182,17 +177,14 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
             }
         });
         //on price tag click
-        note_price.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        note_price.setOnClickListener(v -> {
 
-                String text_price=edPrice.getText().toString().trim();
-                if (!text_price.isEmpty()) {
-                    edPrice.setText(String.valueOf(Double.parseDouble(text_price)*-1));
-                    setWidgetFunctions();
-                }
-
+            String text_price=edPrice.getText().toString().trim();
+            if (!text_price.isEmpty()) {
+                edPrice.setText(String.valueOf(Double.parseDouble(text_price)*-1));
+                setWidgetFunctions();
             }
+
         });
         info_Container.setOnClickListener(new View.OnClickListener() {
             @Override

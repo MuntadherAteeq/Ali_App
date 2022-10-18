@@ -3,12 +3,9 @@ package com.example.ali.ui.main;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.ali.DealItem;
 import com.example.ali.R;
@@ -87,9 +83,7 @@ public class Fragment_1 extends Fragment implements RecycleViewAdapter.OnClickIt
         db = new Database(this.getContext());
         deals_active = new ArrayList<>();
         handler = new Handler();
-
         buildRecycleView();
-
         return view;
     }
 

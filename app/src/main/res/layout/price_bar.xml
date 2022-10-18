@@ -59,11 +59,12 @@
             android:background="@drawable/roundcorner"
             android:src="@drawable/ic_clear"
             android:visibility="gone"
-            android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            app:tint="@color/black"
+           />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

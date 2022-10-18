@@ -6,23 +6,8 @@
     android:layout_height="match_parent"
     android:layout_margin="0dp"
     android:padding="0dp"
-
+    android:background="@color/background"
     >
-
-    <ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
-        <ImageView
-            android:id="@+id/wallpaper"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/wallpaper99"/>
-    </ScrollView>
-
-
 
 
     <include

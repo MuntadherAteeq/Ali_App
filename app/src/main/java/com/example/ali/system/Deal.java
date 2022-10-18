@@ -23,6 +23,7 @@ public class Deal {
         Date date = new Date();
         this.date = dateFormat.format(date);
         this.total = 0;
+
     }
 
 
