@@ -70,13 +70,14 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
-    public void onBindViewHolder(@NonNull final TranViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final TranViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         if (getItemViewType(position)==2){
             String day = "";
             try {
 
-                Date date=new SimpleDateFormat("yyyy/MM/dd").parse(item.get(position).getDate());
-                SimpleDateFormat dayofWeek = new SimpleDateFormat("EEEE");
+                @SuppressLint("SimpleDateFormat") Date date=new SimpleDateFormat("yyyy/MM/dd").parse(item.get(position).getDate());
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dayofWeek = new SimpleDateFormat("EEEE");
+                assert date != null;
                 day = dayofWeek.format(date);
 
             }catch (Exception ignore){}
@@ -119,7 +120,7 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
         TranViewHolder(@NonNull View itemView, final OnClickTranItemListener OnClickTranItemListener) {
             super(itemView);
             this.OnClickTranItemListener = OnClickTranItemListener;
-            // Define the elements by thier id
+            // Define the elements by their id
 
 
             price = itemView.findViewById(R.id.price_tag);
@@ -155,7 +156,7 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
             mainLayout.setAnimation(translate_anim);
           */
 
-            // Create On Click Listener for any spsific element
+            // Create On Click Listener for any specific element
          
             /* X.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,7 +173,9 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
 
     public interface OnClickTranItemListener {
         void onItemClick(int position);
-        void onItemLongClick(int position);
+        void onItemLongClick(int position );
+
+        void onItemSwiped(int position, int type);
     }
 }
 

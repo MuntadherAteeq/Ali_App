@@ -47,7 +47,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/negative_item"
-        app:layout_constraintTop_toBottomOf="@+id/myNewToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/myNewToolbar"
+        android:layout_marginBottom="5dp"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/negative_item"

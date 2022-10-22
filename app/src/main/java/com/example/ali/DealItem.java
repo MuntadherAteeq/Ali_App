@@ -310,8 +310,15 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     @Override
     public void onItemClick(int position) { }
 
+
     @Override
     public void onItemLongClick(int position) { }
+
+    @Override
+    public void onItemSwiped(int position, int type) {
+    }
+
+
 
     ItemTouchHelper.SimpleCallback simpleCallback =new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
@@ -319,12 +326,13 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
             return false;
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
             int position = viewHolder.getLayoutPosition();
+
             AlertDialog.Builder builder1 = new AlertDialog.Builder(DealItem.this);
-            builder1.setMessage("هل انت متأكد انك تريد حذف هذه المعاملة");
+            builder1.setMessage(" هل انت متأكد انك تريد حذف هذه المعاملة ");
             builder1.setCancelable(true);
             builder1.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
@@ -347,6 +355,12 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
                         }
                     });
             builder1.show();
+        }
+
+        @Override
+        public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() == 2) return 0;
+            return super.getSwipeDirs(recyclerView, viewHolder);
         }
     };
 
