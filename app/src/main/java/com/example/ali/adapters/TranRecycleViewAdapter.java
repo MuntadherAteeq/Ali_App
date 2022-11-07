@@ -124,7 +124,6 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
 
 
             price = itemView.findViewById(R.id.price_tag);
-
             comment = itemView.findViewById(R.id.comment_text);
             toolbar= itemView.findViewById(R.id.toolbar);
             time = itemView.findViewById(R.id.time);
@@ -174,8 +173,6 @@ public class TranRecycleViewAdapter extends RecyclerView.Adapter<TranRecycleView
     public interface OnClickTranItemListener {
         void onItemClick(int position);
         void onItemLongClick(int position );
-
-        void onItemSwiped(int position, int type);
     }
 }
 

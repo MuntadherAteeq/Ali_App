@@ -211,10 +211,6 @@ public class Fragment_3 extends Fragment implements TranRecycleViewAdapter.OnCli
         builder1.show();
     }
 
-    @Override
-    public void onItemSwiped(int position, int type) {
-
-    }
 
 
     public void setWidgetFunctions(){

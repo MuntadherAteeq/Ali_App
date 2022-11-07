@@ -314,11 +314,6 @@ public class DealItem extends AppCompatActivity implements TranRecycleViewAdapte
     @Override
     public void onItemLongClick(int position) { }
 
-    @Override
-    public void onItemSwiped(int position, int type) {
-    }
-
-
 
     ItemTouchHelper.SimpleCallback simpleCallback =new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
